@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lu.kremi151._3dttt.events.MatchStartedEvent;
 import lu.kremi151._3dttt.localization.LocalizableTexts;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.ConfigurationOptions;
@@ -21,12 +22,14 @@ import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.economy.EconomyService;
 
-@Plugin(authors = "kremi151", id = "ttt3d", name = "3D TicTacToe", version = "0.0.1.3", description = "3D Tic Tac Toe for Sponge API, playable in the Minecraft chat")
+@Plugin(authors = "kremi151", id = "ttt3d", name = "3D TicTacToe", version = "0.0.3.0", description = "3D Tic Tac Toe for Sponge API, playable in the Minecraft chat")
 public class Main {
 
     private final HashMap<UUID, Session> sessions = new HashMap<>();
@@ -144,6 +147,8 @@ public class Main {
             }
             sessions.put(s.getSessionId(), s);
             invitations.remove(invitation.getInvitationId());
+            MatchStartedEvent event = new MatchStartedEvent(s, p1.get().getUniqueId(), p2.get().getUniqueId(), Cause.of(NamedCause.source(this), NamedCause.simulated(p1.get()), NamedCause.simulated(p2.get())));
+            Sponge.getEventManager().post(event);
             return Optional.of(s);
         } else {
             return Optional.empty();

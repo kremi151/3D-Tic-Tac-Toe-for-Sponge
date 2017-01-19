@@ -12,9 +12,11 @@ import lu.kremi151._3dttt.engine.GameHolder;
 import lu.kremi151._3dttt.engine.GameHolder.Type;
 import lu.kremi151._3dttt.engine.Position;
 import lu.kremi151._3dttt.engine.Winner;
+import lu.kremi151._3dttt.events.MatchFinishedEvent;
 import lu.kremi151._3dttt.localization.LocalizableTexts;
 import lu.kremi151._3dttt.util.EconomyHelper;
 import lu.kremi151._3dttt.util.TextHelper;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.NamedCause;
@@ -80,6 +82,8 @@ public class Session {
                 }
             }
         }
+        MatchFinishedEvent event = new MatchFinishedEvent(this, players[0].getUniqueId(), players[1].getUniqueId(), players[1].getUniqueId().equals(player.getUniqueId()), Cause.of(NamedCause.source(Main.instance), NamedCause.simulated(player), NamedCause.simulated(opponent)));
+        Sponge.getEventManager().post(event);
     }
     
     public boolean areOpponentsEqual(){
