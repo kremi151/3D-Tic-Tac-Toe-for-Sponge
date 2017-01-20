@@ -16,6 +16,12 @@ Succeed to place 4 crosses/circles in a row to win. This can be done <b>horizont
 * <code>ttt3d.invite</code>: Allows a player to invite another player to a match
 * <code>ttt3d.accept</code>: Allows a player to accept an invitation
 
+##Commands
+<i>The commands listed here are the ones a player can and should use. The plugin contains other commands which should be avoided by a player to use as they are executed internally by the plugin when clicking something in the chat.</i>
+
+* <code>/ttt3d invite &lt;player&gt;</code>: Invites another player to a match
+* <code>/ttt3d invite &lt;player&gt; &lt;bet&gt;</code>: Invites another player to a match with a bet. The winner gets the amount of the bet from his opponent. <b>An economy plugin is needed for this</b>
+
 ##API
 ###Events
 There are 4 different Events that a plugin can listen to:
