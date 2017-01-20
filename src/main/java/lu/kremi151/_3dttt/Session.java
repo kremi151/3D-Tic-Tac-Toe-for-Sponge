@@ -13,6 +13,7 @@ import lu.kremi151._3dttt.engine.GameHolder.Type;
 import lu.kremi151._3dttt.engine.Position;
 import lu.kremi151._3dttt.engine.Winner;
 import lu.kremi151._3dttt.events.MatchFinishedEvent;
+import lu.kremi151._3dttt.events.MatchFinishedEvent.WinCause;
 import lu.kremi151._3dttt.localization.LocalizableTexts;
 import lu.kremi151._3dttt.util.EconomyHelper;
 import lu.kremi151._3dttt.util.TextHelper;
@@ -38,15 +39,23 @@ public class Session {
     private int currentPlayer = 0;
     private final Random rand;
 
-    public Session(UUID sessionId, Player player1, Player player2, BigDecimal bet) {
+    public Session(UUID sessionId, Player initiator, Player opponent, BigDecimal bet) {
         this.sessionId = sessionId;
         this.rand = new Random(System.currentTimeMillis());
         this.bet = bet;
 
         Type firstType = Type.randomPlayable(rand);
-        this.players[0] = new TPlayer(player1.getUniqueId(), player1.getName(), firstType);
-        this.players[1] = new TPlayer(player2.getUniqueId(), player2.getName(), firstType.getOpposite());
+        this.players[0] = new TPlayer(initiator.getUniqueId(), initiator.getName(), firstType);
+        this.players[1] = new TPlayer(opponent.getUniqueId(), opponent.getName(), firstType.getOpposite());
         this.currentPlayer = rand.nextInt(2);
+    }
+    
+    public TPlayer getInitiator(){
+        return players[0];
+    }
+    
+    public TPlayer getOpponent(){
+        return players[1];
     }
 
     public UUID getSessionId() {
@@ -82,7 +91,7 @@ public class Session {
                 }
             }
         }
-        MatchFinishedEvent event = new MatchFinishedEvent(this, players[0].getUniqueId(), players[1].getUniqueId(), players[1].getUniqueId().equals(player.getUniqueId()), Cause.of(NamedCause.source(Main.instance), NamedCause.simulated(player), NamedCause.simulated(opponent)));
+        MatchFinishedEvent event = new MatchFinishedEvent(this, players[0].getUniqueId(), players[1].getUniqueId(), players[1].getUniqueId().equals(player.getUniqueId()), (opponent.getSpongePlayer().isPresent()?WinCause.NORMAL:WinCause.PLAYER_LEFT), Cause.of(NamedCause.source(Main.instance), NamedCause.simulated(player), NamedCause.simulated(opponent)));
         Sponge.getEventManager().post(event);
     }
     
@@ -99,7 +108,6 @@ public class Session {
         } else {
             Main.instance.removeSession(sessionId);
             broadcast(LocalizableTexts.playerLeftAbort.toText());
-
             if (waiting.isPresent()) {
                 onPlayerWon(getWaiting());
             } else if (playing.isPresent()) {

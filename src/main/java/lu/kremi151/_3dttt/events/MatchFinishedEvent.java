@@ -18,11 +18,13 @@ public class MatchFinishedEvent extends MatchEvent{
     
     private final UUID winner, loser;
     private final Cause cause;
+    private final WinCause winCause;
     
-    public MatchFinishedEvent(Session session, UUID initiator, UUID opponent, boolean reverse, Cause cause){
+    public MatchFinishedEvent(Session session, UUID initiator, UUID opponent, boolean reverse, WinCause winCause, Cause cause){
         super(initiator, opponent, session);
         this.winner = reverse?opponent:initiator;
         this.loser = reverse?initiator:opponent;
+        this.winCause = winCause;
         this.cause = cause;
     }
     
@@ -45,6 +47,15 @@ public class MatchFinishedEvent extends MatchEvent{
     @Override
     public Cause getCause() {
         return cause;
+    }
+    
+    public WinCause getWinCause(){
+        return winCause;
+    }
+    
+    public enum WinCause{
+        NORMAL,
+        PLAYER_LEFT
     }
     
 }

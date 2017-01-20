@@ -8,7 +8,6 @@ import lu.kremi151._3dttt.commands.CommandAccept;
 import lu.kremi151._3dttt.commands.CommandDecline;
 import lu.kremi151._3dttt.commands.CommandInvite;
 import lu.kremi151._3dttt.commands.CommandMove;
-import lu.kremi151._3dttt.engine.GameHolder;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
@@ -31,6 +30,7 @@ public class Commands {
     private static final CommandSpec acceptCommand = CommandSpec.builder()
             .description(Text.of("Accepts an invitation"))
             .executor(new CommandAccept())
+            .permission("ttt3d.accept")
             .arguments(
                     GenericArguments.string(Text.of("uuid"))
             )
@@ -39,6 +39,7 @@ public class Commands {
     private static final CommandSpec inviteCommand = CommandSpec.builder()
             .description(Text.of("Invites a player to a match"))
             .executor(new CommandInvite())
+            .permission("ttt3d.invite")
             .arguments(
                     GenericArguments.player(Text.of("rival")),
                     GenericArguments.optional(GenericArguments.doubleNum(Text.of("bet")))

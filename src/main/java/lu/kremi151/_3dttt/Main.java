@@ -29,7 +29,7 @@ import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.economy.EconomyService;
 
-@Plugin(authors = "kremi151", id = "ttt3d", name = "3D TicTacToe", version = "0.0.3.0", description = "3D Tic Tac Toe for Sponge API, playable in the Minecraft chat")
+@Plugin(authors = "kremi151", id = "ttt3d", name = "3D TicTacToe", version = "0.0.3.1", description = "3D Tic Tac Toe for Sponge API, playable in the Minecraft chat")
 public class Main {
 
     private final HashMap<UUID, Session> sessions = new HashMap<>();
@@ -139,15 +139,10 @@ public class Main {
         Optional<Player> p1 = Sponge.getServer().getPlayer(invitation.getPlayer1());
         Optional<Player> p2 = Sponge.getServer().getPlayer(invitation.getPlayer2());
         if (p1.isPresent() && p2.isPresent()) {
-            Session s;
-            if (rand.nextBoolean()) {
-                s = new Session(invitation.getInvitationId(), p1.get(), p2.get(), invitation.getBet());
-            } else {
-                s = new Session(invitation.getInvitationId(), p2.get(), p1.get(), invitation.getBet());
-            }
+            Session s = new Session(invitation.getInvitationId(), p1.get(), p2.get(), invitation.getBet());
             sessions.put(s.getSessionId(), s);
             invitations.remove(invitation.getInvitationId());
-            MatchStartedEvent event = new MatchStartedEvent(s, p1.get().getUniqueId(), p2.get().getUniqueId(), Cause.of(NamedCause.source(this), NamedCause.simulated(p1.get()), NamedCause.simulated(p2.get())));
+            MatchStartedEvent event = new MatchStartedEvent(s, p1.get(), p2.get(), Cause.of(NamedCause.source(this), NamedCause.simulated(p1.get()), NamedCause.simulated(p2.get())));
             Sponge.getEventManager().post(event);
             return Optional.of(s);
         } else {

@@ -75,7 +75,7 @@ public class CommandInvite implements CommandExecutor {
                 }
             }
 
-            MatchInviteEvent event = new MatchInviteEvent(host, rival, Cause.of(NamedCause.source(Main.instance), NamedCause.simulated(host), NamedCause.simulated(rival)));
+            MatchInviteEvent event = new MatchInviteEvent(host, rival, Cause.of(NamedCause.source(Main.instance), NamedCause.simulated(host)));
             Sponge.getEventManager().post(event);
 
             if (!event.isCancelled()) {
